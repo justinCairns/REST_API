@@ -31,11 +31,11 @@ const userSchema = new Schema({
         trim: true
       },
       tokens: [{
-          token: {
+        token: {
             type: String,
             required: true
-          }
-      }]
+        }
+    }]
   })
 
   userSchema.methods.toJSON = function() {
@@ -63,7 +63,7 @@ const userSchema = new Schema({
 
   userSchema.methods.generateAuthToken = async function () {
     const user = this
-   
+   console.log(process.env.JSON_WEB_TOKEN_SECRET)
     const token = jwt.sign({ _id: user._id.toString() }, process.env.JSON_WEB_TOKEN_SECRET)
   
     user.tokens = user.tokens.concat({ token })

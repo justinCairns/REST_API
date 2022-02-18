@@ -11,16 +11,18 @@ router.post('/users', async (req, res) => {
 
   try {
     await user.save()
-    const token = await user.generaterAuthToken()
+    const token = await user.generateAuthToken()
 
     sendWelcomeEmail(user.email, user.name)
-    res.status(201).send(user)
+    res.status(201).send({user, token})
   } 
   catch(error) {
+    console.log(error)
     res.status(400).send(error)
   }
 })
 
+//logout a user
 router.post('/users/logout', auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
