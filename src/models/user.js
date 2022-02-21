@@ -63,13 +63,25 @@ const userSchema = new Schema({
 
   userSchema.methods.generateAuthToken = async function () {
     const user = this
-   console.log(process.env.JSON_WEB_TOKEN_SECRET)
+  
     const token = jwt.sign({ _id: user._id.toString() }, process.env.JSON_WEB_TOKEN_SECRET)
   
     user.tokens = user.tokens.concat({ token })
     await user.save()
   
     return token
+  }
+
+  userSchema.statics.findByCredentials = async (email, password) => {       
+    const user = await User.findOne({email}) 
+    if (!user) { 
+      throw new Error('Unable to login') 
+    } 
+    const isMatch = await bcrypt.compare(password, user.password) 
+    if (!isMatch) { 
+      throw new Error('Unable to login') 
+    } 
+    return user 
   }
 
   const User = mongoose.model('User', userSchema);
