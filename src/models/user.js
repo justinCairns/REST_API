@@ -38,6 +38,12 @@ const userSchema = new Schema({
     }]
   })
 
+  userSchema.virtual('tasks', {
+    localField: '_id',
+    foreignField: 'owner',
+    ref: 'Task'
+})
+
   userSchema.methods.toJSON = function() {
     const user = this
     
