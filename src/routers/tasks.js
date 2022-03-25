@@ -53,4 +53,39 @@ router.get('/tasks', auth, async(req, res) => {
     }
 })
 
+//modify account details
+router.patch('/tasks', auth, async(req, res) => {
+    const mods = req.body
+    const taskId = req.body._id
+    console.log(taskId)
+    delete mods._id
+    const props = Object.keys(mods)
+    const modifiable = ['title', 'description', 'completed']
+    const isValid = props.every((prop) => modifiable.includes(prop))
+  
+    if (!isValid) {
+        return res.status(400).send({ error: 'Invalid updates.' })
+    }
+  
+    try {
+        await Task.updateOne({_id: taskId}, {$set: {"title": req.body.title, "description": req.body.description, "completed": req.body.completed}})
+        res.send(req.body)
+    } catch (e) {
+        res.status(400).send()
+        console.log(e)
+    }
+  })
+  
+
+//delete task
+router.delete('/tasks', auth, async (req, res) => {
+    try {
+        await Task.deleteOne({_id: req.body._id})
+        res.send(req.body)
+    } 
+    catch (e) {
+        res.status(500).send()
+    }
+})
+
 module.exports = router
