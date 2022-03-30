@@ -57,7 +57,6 @@ router.get('/tasks', auth, async(req, res) => {
 router.patch('/tasks', auth, async(req, res) => {
     const mods = req.body
     const taskId = req.body._id
-    console.log(taskId)
     delete mods._id
     const props = Object.keys(mods)
     const modifiable = ['title', 'description', 'completed']
