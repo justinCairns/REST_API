@@ -36,7 +36,10 @@ const userSchema = new Schema({
             type: String,
             required: true
         }
-    }]
+      }],
+      avatar: {
+        type: Buffer
+      }
   })
 
   userSchema.virtual('tasks', {
@@ -53,6 +56,7 @@ const userSchema = new Schema({
     delete userObject.password
     delete userObject.__v
     delete userObject.tokens
+    delete userObject.avatar
     
     return userObject
   }
